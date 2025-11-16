@@ -40,9 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     session_regenerate_id(true);
-    $_SESSION['user_id']   = $user['id'];
-    $_SESSION['user_name'] = $user['name'];
-    $_SESSION['user_email'] = $user['email'];
+    $_SESSION['user_id'] = $user['id'];
 
     header('Location: dashboard.php');
     exit;
@@ -66,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </header>
 
         <?php if ($message): ?>
-            <p class="mb-4 text-sm text-red-400 bg-red-900/40 border border-red-700 rounded-md px-3 py-2">
+            <p class="mb-4 text-sm text-white bg-green-900/40 border border-green-700 rounded-md px-3 py-2">
                 <?= htmlspecialchars($message) ?>
             </p>
         <?php endif; ?>

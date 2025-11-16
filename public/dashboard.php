@@ -22,15 +22,36 @@ if (isset($_GET['logout']) && $_GET['logout'] === '1') {
     exit;
 }
 
-if (empty($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
+require __DIR__ . '/../src/db.php';
 
-$userId = $_SESSION['user_id'];
-$userName = $_SESSION['user_name'] ?? 'Usuario';
-$userEmail = $_SESSION['user_email'] ?? '';
+try {
+    $pdo = getDBConnection();
+    $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+    $stmt->execute([$_SESSION['user_id']]);
+    $user = $stmt->fetch();
+    
+    if (!$user) {
+        session_unset();
+        session_destroy();
+        header('Location: login.php');
+        exit;
+    }
+    
+    $userId = $user['id'];
+    $userName = $user['name'];
+    $userEmail = $user['email'];
+    
+} catch (PDOException $e) {
+    session_unset();
+    session_destroy();
+    header('Location: login.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
